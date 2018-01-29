@@ -14,6 +14,7 @@ exports.config = function (customConfig) {
             path: resolve(customConfig.comDistPath),
             filename: '[name].[hash:7].js',
         },
+        devtool: false,
         resolve: {
             extensions: ['.js', '.vue', '.json'],
             alias: {
@@ -77,22 +78,21 @@ exports.config = function (customConfig) {
         },
         plugins: [
             new webpack.DefinePlugin({
-                'process.env': '"production"',
                 'process.env.NODE_ENV': '"production"'
             }),
             // UglifyJs do not support ES6+, you can also use babel-minify for better treeshaking: https://github.com/babel/minify
-            // new webpack.optimize.UglifyJsPlugin({
-            //     // warnings: false
-            //     // compress: {
-            //     //     warnings: false
-            //     // },
-            //     // sourceMap: true
-            // }),
+            new webpack.optimize.UglifyJsPlugin({
+                warnings: false,
+                compress: false,
+                sourceMap: false,
+                exclude: [/\.min\.js$/gi] // skip pre-minified libs
+            }),
             // Compress extracted CSS. We are using this plugin so that possible
             // duplicated CSS from different components can be deduped.
             new OptimizeCSSPlugin({
                 cssProcessorOptions: {
-                    safe: true
+                    safe: true,
+                    discardComments: { removeAll: true }
                 }
             })
         ]
