@@ -9,9 +9,18 @@ module.exports = {
             let comDistPath = `${comPath}/dist`
 
             let entry = {}
-            Object.keys(customConfig.entry).forEach(key => {
-                entry[key] = path.posix.resolve(comSrcPath, customConfig.entry[key])
-            })
+            if (customConfig.entry instanceof Array) {
+                customConfig.entry.forEach(item => {
+                    let fullPath = path.posix.resolve(comSrcPath, item)
+                    let key = path.basename(fullPath, path.extname(fullPath))
+                    entry[key] = fullPath
+                })
+            } else if (customConfig.entry instanceof Object) {
+                Object.keys(customConfig.entry).forEach(key => {
+                    let fullPath = path.posix.resolve(comSrcPath, customConfig.entry[key])
+                    entry[key] = fullPath
+                })
+            }
 
             let usedCustomConfig = Object.assign(customConfig, {entry, comSrcPath, comDistPath, _comFullPath: path.posix.resolve(comPath)})
             const webpackConfig = require('./webpack.common.config').config(usedCustomConfig)
@@ -26,7 +35,8 @@ module.exports = {
                 //     chunks: false,
                 //     chunkModules: false
                 // }) + '\n\n'
-                resolve(usedCustomConfig, stats)
+                // console.log(resultData)
+                resolve({config: usedCustomConfig, stats})
             });
         })
     }

@@ -22,8 +22,7 @@ exports.config = function (customConfig) {
             }
         },
         externals: {
-            vue: 'vue',
-            axios: 'axios'
+            vue: 'vue'
         },
         module: {
             rules: [
@@ -31,7 +30,7 @@ exports.config = function (customConfig) {
                     test: /\.vue$/,
                     loader: 'vue-loader',
                     options: {
-                        esModule: false, // vue-loader v13 更新 默认值为 true v12及之前版本为 false, 此项配置影响 vue 自身异步组件写法以及 webpack 打包结果
+                        esModule: !!customConfig.esModule, // vue-loader v13 更新 默认值为 true v12及之前版本为 false, 此项配置影响 vue 自身异步组件写法以及 webpack 打包结果
                         loaders: utils.cssLoaders({
                             sourceMap: false,
                             extract: false,          // css 不做提取
@@ -82,12 +81,13 @@ exports.config = function (customConfig) {
                 'process.env.NODE_ENV': '"production"'
             }),
             // UglifyJs do not support ES6+, you can also use babel-minify for better treeshaking: https://github.com/babel/minify
-            new webpack.optimize.UglifyJsPlugin({
-                compress: {
-                    warnings: false
-                },
-                sourceMap: true
-            }),
+            // new webpack.optimize.UglifyJsPlugin({
+            //     // warnings: false
+            //     // compress: {
+            //     //     warnings: false
+            //     // },
+            //     // sourceMap: true
+            // }),
             // Compress extracted CSS. We are using this plugin so that possible
             // duplicated CSS from different components can be deduped.
             new OptimizeCSSPlugin({

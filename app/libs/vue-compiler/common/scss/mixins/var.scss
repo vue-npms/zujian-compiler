@@ -1,11 +1,11 @@
-$vmuiSupportRem: false !default;
+$vuiSupportRem: false !default;
 // rem模式 该值应该和rem.js函数传递的值保持一致
-$vmuiDesignSketchWidth: 375 !default;
+$vuiDesignSketchWidth: 375 !default;
 
 @function pxRem($px) {
-  @if $vmuiSupportRem {
+  @if $vuiSupportRem {
     // 这里的375是默认值，因为框架就是按375设计的，不需要更改
-    @return $px * $vmuiDesignSketchWidth / 375 + rem;
+    @return $px * $vuiDesignSketchWidth / 375 + rem;
   } @else {
     @return $px + px;
   }
