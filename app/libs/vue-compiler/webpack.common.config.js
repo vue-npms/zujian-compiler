@@ -18,8 +18,7 @@ exports.config = function (customConfig) {
         resolve: {
             extensions: ['.js', '.vue', '.json'],
             alias: {
-                'vue$': 'vue/dist/vue.esm.js',
-                '@': resolve('src'),
+                'vue$': 'vue/dist/vue.esm.js'
             }
         },
         externals: {
@@ -35,6 +34,7 @@ exports.config = function (customConfig) {
                         loaders: utils.cssLoaders({
                             sourceMap: false,
                             extract: false,          // css 不做提取
+                            processCssUrls: false,
                             scss: customConfig.scss
                         }),
                         transformToRequire: {
@@ -78,13 +78,26 @@ exports.config = function (customConfig) {
         },
         plugins: [
             new webpack.DefinePlugin({
-                'process.env.NODE_ENV': '"production"'
+                'process.env': {
+                    'NODE_ENV': JSON.stringify('production')
+                }
             }),
             // UglifyJs do not support ES6+, you can also use babel-minify for better treeshaking: https://github.com/babel/minify
             new webpack.optimize.UglifyJsPlugin({
                 warnings: false,
-                compress: false,
                 sourceMap: false,
+                compress: {
+                    // important set expression: true
+                    expression: true,
+                    // 在UglifyJs删除没有用到的代码时不输出警告
+                    warnings: false,
+                    // 删除所有的 `console` 语句
+                    // 还可以兼容ie浏览器
+                    drop_console: true,
+                    // 提取出出现多次但是没有定义成变量去引用的静态值
+                    reduce_vars: true,
+                },
+                extractComments: false,
                 exclude: [/\.min\.js$/gi] // skip pre-minified libs
             }),
             // Compress extracted CSS. We are using this plugin so that possible
@@ -92,6 +105,7 @@ exports.config = function (customConfig) {
             new OptimizeCSSPlugin({
                 cssProcessorOptions: {
                     safe: true,
+                    canPrint: false,
                     discardComments: { removeAll: true }
                 }
             })

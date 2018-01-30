@@ -7,7 +7,7 @@ exports.assetsPath = function (assetsSubDirectory, _path) {
 }
 
 exports.cssLoaders = function (options) {
-  options = options || {}
+  options = options || {sourceMap: false}
 
   const cssLoader = {
     loader: 'css-loader',
