@@ -1,10 +1,13 @@
-const Koa = require('koa')
 const config = require("./config/application.json")
-const app = new Koa()
+var express = require('express')
+const cors = require('cors')
 
+var app = express()
+
+app.use(cors())
 require('./config/routes')(app)
 
-app.listen(config.PORT);
-console.log(`listen at port: ${config.PORT}`)
 
-
+app.listen(config.PORT, function () {
+    console.log(`listen at port: ${config.PORT}`)
+});

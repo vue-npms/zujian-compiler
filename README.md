@@ -19,3 +19,19 @@
 "vue-template-compiler": "^2.5.13",
 "webpack": "^3.10.0"
 ```
+
+upload files
+```
+<input type="file" multiple @change="uploadFile($event)">
+uploadFile (e) {
+    let fd = new FormData()
+    Array.prototype.forEach.call(e.target.files, file => {
+      fd.append('files', file)
+    })
+    fd.append('index', '123456')
+    this.apiInstance.post('http://localhost:4001/api/uploader/multiple', fd, { headers: { 'Content-Type': 'multipart/form-data' } }).then(res => {
+      console.log(res)
+    })
+  }
+},
+```
