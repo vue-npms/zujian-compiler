@@ -1,9 +1,7 @@
-var express = require('express');
-var router = express.Router();
 const fs = require('fs')
 const path = require('path')
 const mkdirp = require('mkdirp')
-const multer  = require('multer')
+const multer  = require('koa-multer')
 const storage = multer.diskStorage({
     filename: function (req, file, cb) {
         cb(null, file.originalname)
@@ -11,23 +9,24 @@ const storage = multer.diskStorage({
 })
 let upload = multer({ storage })
 
-router.get('/upload', (ctx, next) => {
-    ctx.body = 'Hello World!'
-})
+module.exports = function (apiRouter) {
 
-router.post('/multiple',upload.array('files'), (req, res) => {
-    // params
-    let {index} = req.body
-    let destDir = `tmp/compiled-components/${index}/src`
-    // create folder
-    mkdirp(destDir, function (err) {
-        if (err) throw err
-        // copyfile
-        Array.prototype.forEach.call(req.files, (file) => {
-            fs.createReadStream(file.path).pipe(fs.createWriteStream(`${destDir}/${file.filename}`))
-        })
+    apiRouter.get('/upload', (ctx, next) => {
+        ctx.body = 'Hello World!'
     })
-    res.send('post file success!')
-})
 
-module.exports = router
+    apiRouter.post('/uploader/code_files',upload.array('files'), (ctx, next) => {
+        // params
+        let {index} = ctx.req.body
+        let destDir = `tmp/compiled-components/${index}/src`
+        // create folder
+        mkdirp(destDir, function (err) {
+            if (err) throw err
+            // copyfile
+            Array.prototype.forEach.call(ctx.req.files, (file) => {
+                fs.createReadStream(file.path).pipe(fs.createWriteStream(`${destDir}/${file.filename}`))
+            })
+        })
+        ctx.body = 'post file success!'
+    })
+}

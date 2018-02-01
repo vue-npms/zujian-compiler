@@ -1,8 +1,7 @@
 const config = require("./config/application.json")
-var express = require('express')
-const cors = require('cors')
-
-var app = express()
+const Koa = require('koa')
+const cors = require('koa2-cors')
+const app = new Koa()
 
 app.use(cors())
 require('./config/routes')(app)

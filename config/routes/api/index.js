@@ -1,3 +1,3 @@
-module.exports = function (app) {
-    app.use('/api/uploader', require('./uploader'))
+module.exports = function (apiRouter) {
+    require('./uploader')(apiRouter)
 }
