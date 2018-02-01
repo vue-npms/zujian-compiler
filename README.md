@@ -1,3 +1,30 @@
+### Usage
+```
+vueCompiler.compile({
+    // entry: {hello: 'hello/hello.vue'}
+    entry: ['hello/hello.vue'],
+    index: '12345678', // must
+    esModule: false // default
+}).then(data => {
+    console.log('----')
+    console.log(data.config)
+    console.log('==========')
+    let resultData = data.stats.toString({
+        colors: true,
+        modules: false,
+        children: false,
+        chunks: false,
+        chunkModules: false
+    }) + '\n\n'
+    console.log(resultData)
+    if (data.stats.hasErrors()) {
+        console.log('exist error')
+    }
+    console.log('===')
+})
+```
+
+
 #### webpack dependences
 ```
 "autoprefixer": "^7.2.5",

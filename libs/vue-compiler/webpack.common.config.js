@@ -4,7 +4,7 @@ const utils = require('./utils')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
 function resolve(dir) {
-    return path.join(__dirname, '../../..', dir)
+    return path.posix.resolve(dir)
 }
 
 exports.config = function (customConfig) {

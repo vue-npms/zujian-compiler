@@ -1,3 +1,4 @@
+let compiler = require('../../../app/common/compiler')
 const fs = require('fs')
 const utils = require('../../../libs/utils')
 const mkdirp = require('mkdirp')
@@ -18,16 +19,31 @@ module.exports = function (apiRouter) {
     apiRouter.post('/uploader/code_files',upload.array('files'), (ctx, next) => {
         // params
         let {index} = ctx.req.body
-        let destDir = `tmp/compiled-components/${index}/src`
+        let destDir = `${compiler.indexPath(index)}/src`
         // empty or create folder
         utils.fsExt.rmDir(destDir, false, false)
-        mkdirp(destDir, function (err) {
-            if (err) throw err
-            // copyfile
-            Array.prototype.forEach.call(ctx.req.files, (file) => {
-                fs.createReadStream(file.path).pipe(fs.createWriteStream(`${destDir}/${file.filename}`))
+
+        return new Promise((resolve, reject) => {
+            mkdirp(destDir, function (err) {
+                if (err) throw err
+                // copyfile
+                let filesCount = ctx.req.files.length
+                Array.prototype.forEach.call(ctx.req.files, (file) => {
+                    fs.createReadStream(file.path).pipe(fs.createWriteStream(`${destDir}/${file.filename}`)).on('finish', () => {
+                        filesCount--
+                        if (!filesCount) {
+                            // compiler component
+                            compiler.compile(index).then(data => {
+                                resolve(data)
+                            }).catch(err => {
+                                reject(err)
+                            })
+                        }
+                    })
+                })
             })
+        }).then((data) => {
+            ctx.body = 'compile finished!'
         })
-        ctx.body = 'post file success!'
     })
 }

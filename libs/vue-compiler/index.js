@@ -27,15 +27,6 @@ module.exports = {
             const compiler = webpack(webpackConfig);
             compiler.run((err, stats) => {
                 if (err) throw err
-                // ...
-                // let resultData = stats.toString({
-                //     colors: true,
-                //     modules: false,
-                //     children: false,
-                //     chunks: false,
-                //     chunkModules: false
-                // }) + '\n\n'
-                // console.log(resultData)
                 resolve({config: usedCustomConfig, stats})
             });
         })
