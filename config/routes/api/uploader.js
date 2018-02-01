@@ -1,5 +1,5 @@
 const fs = require('fs')
-const path = require('path')
+const utils = require('../../../libs/utils')
 const mkdirp = require('mkdirp')
 const multer  = require('koa-multer')
 const storage = multer.diskStorage({
@@ -19,7 +19,8 @@ module.exports = function (apiRouter) {
         // params
         let {index} = ctx.req.body
         let destDir = `tmp/compiled-components/${index}/src`
-        // create folder
+        // empty or create folder
+        utils.fsExt.rmDir(destDir, false, false)
         mkdirp(destDir, function (err) {
             if (err) throw err
             // copyfile
