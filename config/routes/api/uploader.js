@@ -1,4 +1,5 @@
-let compiler = require('../../../app/common/compiler')
+const compiler = require('../../../app/common/compiler')
+const alioss = require('../../../app/common/alioss')
 const fs = require('fs')
 const utils = require('../../../libs/utils')
 const mkdirp = require('mkdirp')
@@ -12,11 +13,11 @@ let upload = multer({ storage })
 
 module.exports = function (apiRouter) {
 
-    apiRouter.get('/upload', (ctx, next) => {
-        ctx.body = 'Hello World!'
-    })
+    // apiRouter.get('/upload', (ctx, next) => {
+    //     ctx.body = 'Hello World!'
+    // })
 
-    apiRouter.post('/uploader/code_files',upload.array('files'), (ctx, next) => {
+    apiRouter.post('/uploader/co_files',upload.array('files'), (ctx, next) => {
         // params
         let {index} = ctx.req.body
         let destDir = `${compiler.indexPath(index)}/src`
@@ -43,7 +44,22 @@ module.exports = function (apiRouter) {
                 })
             })
         }).then((data) => {
-            ctx.body = 'compile finished!'
+            ctx.body = {
+                config: data.config,
+                originConfig: data.originConfig,
+                stats: {shortHash: data.stats.shortHash}
+            }
+        }).catch(err => {
+            ctx.throw(400, err.message)
+        })
+    })
+
+    apiRouter.post('/uploader/co_publish', (ctx, next) => {
+        let {index} = ctx.request.body
+        return alioss.saveComWithIndex(index).then(resultList => {
+            ctx.body = Object.assign(resultList[0], resultList[1])
+        }).catch(err => {
+            ctx.throw(400, err.message)
         })
     })
 }

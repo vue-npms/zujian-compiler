@@ -1,14 +1,23 @@
 const config = require("./config/application.json")
 const Koa = require('koa')
 const cors = require('koa2-cors')
+var bodyParser = require('koa-bodyparser')
 const app = new Koa()
 
 app.use(cors())
-require('./config/routes')(app)
+app.use(bodyParser())
 
-app.on('error', (err) => {
-    console.log(err)
+app.use(async (ctx, next) => {
+    try {
+        await next();
+    } catch (err) {
+        ctx.status = err.status || 500;
+        ctx.body = err.message;
+        ctx.app.emit('error', err, ctx);
+    }
 })
+
+require('./config/routes')(app)
 
 app.listen(config.PORT, function () {
     console.log(`listen at port: ${config.PORT}`)

@@ -7,6 +7,10 @@ const zipArchive = require('archiver')('zip', {
 module.exports = {
     zip (srcFolder, zipFilePath) {
         return new Promise((resolve) => {
+            if (fs.existsSync(zipFilePath)) {
+                fs.unlinkSync(zipFilePath)
+            }
+
             let output = fs.createWriteStream(zipFilePath)
 
             output.on('close', function() {

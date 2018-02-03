@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
     compile (customConfig) {
         return new Promise(resolve => {
-
+            let originConfig = Object.assign({}, customConfig)
             let comPath = `tmp/compiled-components/${customConfig.index}`
             let comSrcPath = `${comPath}/src`
             let comDistPath = `${comPath}/dist`
@@ -27,7 +27,7 @@ module.exports = {
             const compiler = webpack(webpackConfig);
             compiler.run((err, stats) => {
                 if (err) throw err
-                resolve({config: usedCustomConfig, stats})
+                resolve({config: usedCustomConfig, originConfig, stats: Object.assign(stats, {shortHash: stats.hash.slice(0, 7)})})
             });
         })
     }

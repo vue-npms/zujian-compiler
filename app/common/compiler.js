@@ -7,13 +7,17 @@ module.exports = {
         return `tmp/compiled-components/${index}`
     },
     compile (index) {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             // 编译vue组件
-            let configString = fs.readFileSync(path.posix.resolve(`${this.indexPath(index)}/src/config.json`), 'utf8')
+            let configJsonFilePath = path.posix.resolve(`${this.indexPath(index)}/src/config.json`)
+            let configString = fs.readFileSync(configJsonFilePath, 'utf8')
             let config = JSON.parse(configString)
 
-            vueCompiler.compile(Object.assign(config, {index})).then(data => {
+            vueCompiler.compile(Object.assign({}, config, {index})).then(data => {
+                fs.writeFileSync(configJsonFilePath, JSON.stringify(Object.assign(config, {shortHash: data.stats.shortHash}), null, 2))
                 resolve(data)
+            }).catch(err => {
+                reject(err)
             })
         })
     }
