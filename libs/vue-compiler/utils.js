@@ -60,7 +60,19 @@ exports.cssLoaders = function (options) {
         //   resources: path.resolve(__dirname, '../src/assets/stylesheets/mixins/vmuiVar.scss')
         // }
         options: {
-          resources: options.scss && options.scss.resources || path.resolve(__dirname, './common/scss/mixins/var.scss')
+          resources: (function (scssConfig) {
+            let resources = [path.resolve(__dirname, './common/scss/mixins/var.scss')]
+            if (scssConfig) {
+              if (scssConfig.resources) {
+                  resources.concat(scssConfig.resources)
+              }
+              // default unit px
+              if (scssConfig.unit === 'rem') {
+                  resources.push(path.resolve(__dirname, './common/scss/mixins/rem.scss'))
+              }
+            }
+            return resources
+          })(options.scss)
         }
       }
     ),

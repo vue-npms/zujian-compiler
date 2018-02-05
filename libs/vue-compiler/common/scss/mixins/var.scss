@@ -1,26 +1,22 @@
-$vuiSupportRem: false !default;
-// rem模式 该值应该和rem.js函数传递的值保持一致
-$vuiDesignSketchWidth: 375 !default;
+$webCoSupportRem: false !default;
 
 @function pxRem($px) {
-  @if $vuiSupportRem {
-    // 这里的375是默认值，因为框架就是按375设计的，不需要更改
-    @return $px * $vuiDesignSketchWidth / 375 + rem;
+  @if $webCoSupportRem {
+    @return $px + rem;
   } @else {
     @return $px + px;
   }
 }
 
-
-$color-primary: #26a2ff;
-$color-danger: #ef4f4f;
-$color-warning: #ffb400;
-$color-white: #fff;
-$color-stable: #f5f5f5;
-$color-disable: #ccc;
-$color-royal: #b5b5b5;
-$color-dark: #484746;
-$color-calm: #11C1F3;
-$color-hollow: rgba(0, 0, 0, 0);
-$color-default: #f6f8fa;
-$color-default-text: #656b79;
+$color-primary: #26a2ff !default;
+$color-danger: #ef4f4f !default;
+$color-warning: #ffb400 !default;
+$color-white: #fff !default;
+$color-stable: #f5f5f5 !default;
+$color-disable: #ccc !default;
+$color-royal: #b5b5b5 !default;
+$color-dark: #484746 !default;
+$color-calm: #11C1F3 !default;
+$color-hollow: rgba(0, 0, 0, 0) !default;
+$color-default: #f6f8fa !default;
+$color-default-text: #656b79 !default;
