@@ -2,7 +2,7 @@ const webpack = require("webpack");
 const path = require('path');
 module.exports = {
     compile (customConfig) {
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
             let originConfig = Object.assign({}, customConfig)
             let comPath = `tmp/compiled-components/${customConfig.index}`
             let comSrcPath = `${comPath}/src`
@@ -27,6 +27,9 @@ module.exports = {
             const compiler = webpack(webpackConfig);
             compiler.run((err, stats) => {
                 if (err) throw err
+                else if (stats.compilation.errors.length) {
+                    reject(stats.compilation.errors)
+                }
                 resolve({config: usedCustomConfig, originConfig, stats: Object.assign(stats, {shortHash: stats.hash.slice(0, 7)})})
             });
         })

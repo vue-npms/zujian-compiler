@@ -1,15 +1,16 @@
 const fs = require('fs')
-const path = require('path')
-const zipArchive = require('archiver')('zip', {
-    zlib: { level: 9 } // Sets the compression level.
-})
+const Archiver = require('archiver')
 
 module.exports = {
     zip (srcFolder, zipFilePath) {
         return new Promise((resolve) => {
             if (fs.existsSync(zipFilePath)) {
-                fs.unlinkSync(zipFilePath)
+                return resolve()
             }
+
+            let zipArchive = Archiver('zip', {
+                zlib: { level: 9 } // Sets the compression level.
+            })
 
             let output = fs.createWriteStream(zipFilePath)
 
@@ -22,6 +23,7 @@ module.exports = {
             })
             zipArchive.pipe(output)
             zipArchive.glob('**/*',{ cwd: srcFolder, src: ['**/*'], expand: true })
+            // zipArchive.directory(srcFolder, false)
             zipArchive.finalize()
         })
     }

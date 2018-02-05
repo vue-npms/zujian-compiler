@@ -50,7 +50,13 @@ module.exports = {
                     // let filePath = dirPath + '/' + files[i]
                     let filePath = path.resolve(distPath, dir, fileName)
                     if (fs.statSync(filePath).isFile()) {
-                        filePromises.push(store.put(`co-dist/${index}/${dir}/${fileName}`, `${filePath}`))
+                        filePromises.push(new Promise(((resolve, reject) => {
+                            store.put(`co-dist/${index}/${dir}/${fileName}`, `${filePath}`).then(object => {
+                                resolve({unit: dir, object})
+                            }).catch(err => {
+                                reject(err)
+                            })
+                        })))
                     }
                 })
             })

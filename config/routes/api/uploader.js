@@ -13,24 +13,25 @@ let upload = multer({ storage })
 
 module.exports = function (apiRouter) {
 
-    // apiRouter.get('/upload', (ctx, next) => {
-    //     ctx.body = 'Hello World!'
-    // })
+    apiRouter.get('/upload', (ctx, next) => {
+        ctx.body = 'Hello World!'
+    })
 
     apiRouter.post('/uploader/co_files',upload.array('files'), (ctx, next) => {
         // params
         let {index} = ctx.req.body
-        let destDir = `${compiler.indexPath(index)}/src`
+        let indexDir = `${compiler.indexPath(index)}`
+        let srcDir = `${indexDir}/src`
         // empty or create folder
-        utils.fsExt.rmDir(destDir, false, false)
+        utils.fsExt.rmDir(indexDir, false, false)
 
         return new Promise((resolve, reject) => {
-            mkdirp(destDir, function (err) {
+            mkdirp(srcDir, function (err) {
                 if (err) throw err
                 // copyfile
                 let filesCount = ctx.req.files.length
                 Array.prototype.forEach.call(ctx.req.files, (file) => {
-                    fs.createReadStream(file.path).pipe(fs.createWriteStream(`${destDir}/${file.filename}`)).on('finish', () => {
+                    fs.createReadStream(file.path).pipe(fs.createWriteStream(`${srcDir}/${file.filename}`)).on('finish', () => {
                         filesCount--
                         if (!filesCount) {
                             // compiler component
@@ -46,7 +47,7 @@ module.exports = function (apiRouter) {
         }).then((data) => {
             ctx.body = data
         }).catch(err => {
-            ctx.throw(400, err.message)
+            ctx.throw(400, JSON.stringify(err))
         })
     })
 
