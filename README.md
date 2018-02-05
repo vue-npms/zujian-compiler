@@ -1,3 +1,14 @@
+### config.json
+```
+{
+  "entry": {
+    "button": "button.vue",
+    "hello": "hello.vue"
+  },
+  "units": ["px", "rem"]
+}
+```
+
 ### Usage
 ```
 vueCompiler.compile({

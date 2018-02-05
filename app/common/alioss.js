@@ -17,7 +17,9 @@ module.exports = {
             let configString = fs.readFileSync(configJsonFilePath, 'utf8')
             let config = JSON.parse(configString)
 
-            let zipFileName = `${index}.${config.shortHash}.zip`
+            let shortHash = `${config.px && config.px.shortHash}.${config.rem && config.rem.shortHash}`
+
+            let zipFileName = `${index}.${shortHash}.zip`
             zipFolder.zip(`${comPath}/src`, `${path.posix.resolve(comPath, zipFileName)}`).then(() => {
                 store.put(`oss-co-src-cloud/${zipFileName}`, `${comPath}/${zipFileName}`).then(object => {
                     resolve({src: {
@@ -38,20 +40,25 @@ module.exports = {
         return new Promise((resolve, reject) => {
             let comPath = compiler.indexPath(index)
             let distPath = `${comPath}/dist`
-            let files = fs.readdirSync(distPath)
+            let dirPaths = fs.readdirSync(distPath)
 
             let filePromises = []
-            files.forEach((fileName) => {
-                // let filePath = dirPath + '/' + files[i]
-                let filePath = path.resolve(distPath, fileName)
-                if (fs.statSync(filePath).isFile()) {
-                    filePromises.push(store.put(`co-dist/${index}/${fileName}`, `${filePath}`))
-                }
+
+            dirPaths.forEach(dir => {
+                let files = fs.readdirSync(path.resolve(distPath, dir))
+                files.forEach((fileName) => {
+                    // let filePath = dirPath + '/' + files[i]
+                    let filePath = path.resolve(distPath, dir, fileName)
+                    if (fs.statSync(filePath).isFile()) {
+                        filePromises.push(store.put(`co-dist/${index}/${dir}/${fileName}`, `${filePath}`))
+                    }
+                })
             })
-            Promise.all(filePromises).then(result => {
+
+            Promise.all(filePromises).then(objects => {
                 resolve({dist: {
                     index,
-                    files: files
+                    objects
                 }})
             }).catch(err => {
                 reject(err)

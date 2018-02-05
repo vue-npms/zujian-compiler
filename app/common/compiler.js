@@ -13,8 +13,45 @@ module.exports = {
             let configString = fs.readFileSync(configJsonFilePath, 'utf8')
             let config = JSON.parse(configString)
 
-            vueCompiler.compile(Object.assign({}, config, {index})).then(data => {
-                fs.writeFileSync(configJsonFilePath, JSON.stringify(Object.assign(config, {shortHash: data.stats.shortHash}), null, 2))
+            config.units = config.units || ['px']
+            let compilePromises = []
+            config.units.forEach((unit) => {
+                if (unit === 'px') {
+                    compilePromises.push(vueCompiler.compile(Object.assign({}, config, {index, scss: {unit: 'px'}})))
+                } else if (unit === 'rem') {
+                    compilePromises.push(vueCompiler.compile(Object.assign({}, config, {index, scss: {unit: 'rem'}})))
+                }
+            })
+
+            Promise.all(compilePromises).then(results => {
+                let data = {}
+                if (config.units.indexOf('px') !== -1) {
+                    data.px = {
+                        config: results[0].config,
+                        originConfig: results[0].originConfig,
+                        stats: {shortHash: results[0].stats.shortHash}
+                    }
+                    Object.assign(config, {
+                        px: {
+                            shortHash: results[0].stats.shortHash
+                        }
+                    })
+                }
+                if (config.units.indexOf('rem') !== -1) {
+                    data.rem = {
+                        config: results[1].config,
+                        originConfig: results[1].originConfig,
+                        stats: {shortHash: results[1].stats.shortHash}
+                    }
+                    Object.assign(config, {
+                        rem: {
+                            shortHash: results[1].stats.shortHash
+                        }
+                    })
+                }
+
+                fs.writeFileSync(configJsonFilePath, JSON.stringify(config, null, 2))
+
                 resolve(data)
             }).catch(err => {
                 reject(err)

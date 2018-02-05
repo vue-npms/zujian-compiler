@@ -44,11 +44,7 @@ module.exports = function (apiRouter) {
                 })
             })
         }).then((data) => {
-            ctx.body = {
-                config: data.config,
-                originConfig: data.originConfig,
-                stats: {shortHash: data.stats.shortHash}
-            }
+            ctx.body = data
         }).catch(err => {
             ctx.throw(400, err.message)
         })

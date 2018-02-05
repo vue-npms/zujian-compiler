@@ -6,7 +6,7 @@ module.exports = {
             let originConfig = Object.assign({}, customConfig)
             let comPath = `tmp/compiled-components/${customConfig.index}`
             let comSrcPath = `${comPath}/src`
-            let comDistPath = `${comPath}/dist`
+            let comDistPath = `${comPath}/dist/${customConfig.scss.unit}`
 
             let entry = {}
             if (customConfig.entry instanceof Array) {
