@@ -19,7 +19,7 @@ module.exports = function (apiRouter) {
 
     apiRouter.post('/uploader/co_files',upload.array('files'), (ctx, next) => {
         // params
-        let {index} = ctx.req.body
+        let {index, units} = ctx.req.body
         let indexDir = `${compiler.indexPath(index)}`
         let srcDir = `${indexDir}/src`
         // empty or create folder
@@ -35,7 +35,7 @@ module.exports = function (apiRouter) {
                         filesCount--
                         if (!filesCount) {
                             // compiler component
-                            compiler.compile(index).then(data => {
+                            compiler.compile(index, units).then(data => {
                                 resolve(data)
                             }).catch(err => {
                                 reject(err)

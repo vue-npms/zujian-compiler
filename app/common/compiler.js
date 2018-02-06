@@ -6,14 +6,15 @@ module.exports = {
         if (!index) throw new Error('index must exist')
         return `tmp/compiled-components/${index}`
     },
-    compile (index) {
+    compile (index, units) {
         return new Promise((resolve, reject) => {
             // 编译vue组件
             let configJsonFilePath = path.posix.resolve(`${this.indexPath(index)}/src/config.json`)
             let configString = fs.readFileSync(configJsonFilePath, 'utf8')
             let config = JSON.parse(configString)
 
-            config.units = config.units || ['px']
+            config.units = units || config.units
+
             let compilePromises = []
             config.units.forEach((unit) => {
                 if (unit === 'px') {
