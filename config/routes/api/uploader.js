@@ -47,7 +47,7 @@ module.exports = function (apiRouter) {
         }).then((data) => {
             ctx.body = data
         }).catch(err => {
-            ctx.throw(400, JSON.stringify(err))
+            ctx.throw(400, err.message)
         })
     })
 

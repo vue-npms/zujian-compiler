@@ -28,7 +28,7 @@ module.exports = {
             compiler.run((err, stats) => {
                 if (err) throw err
                 else if (stats.compilation.errors.length) {
-                    reject(stats.compilation.errors)
+                    reject(stats.compilation.errors[0])
                 }
                 resolve({config: usedCustomConfig, originConfig, stats: Object.assign(stats, {shortHash: stats.hash.slice(0, 7)})})
             });
