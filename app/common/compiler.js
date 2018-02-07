@@ -13,7 +13,7 @@ module.exports = {
             let configString = fs.readFileSync(configJsonFilePath, 'utf8')
             let config = JSON.parse(configString)
 
-            config.units = units || config.units
+            config.units = units || config.units || ['px']
 
             let compilePromises = []
             config.units.forEach((unit) => {

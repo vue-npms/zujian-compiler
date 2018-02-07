@@ -96,6 +96,9 @@ exports.config = function (customConfig) {
                     drop_console: true,
                     // 提取出出现多次但是没有定义成变量去引用的静态值
                     reduce_vars: true,
+                    global_defs: {
+                        DEBUG: false
+                    },
                 },
                 extractComments: false,
                 exclude: [/\.min\.js$/gi] // skip pre-minified libs
