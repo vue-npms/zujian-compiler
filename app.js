@@ -2,8 +2,10 @@ const config = require("./config/application.json")
 const Koa = require('koa')
 const cors = require('koa2-cors')
 var bodyParser = require('koa-bodyparser')
+const logger = require('koa-logger')
 const app = new Koa()
 
+app.use(logger())
 app.use(cors())
 app.use(bodyParser())
 
