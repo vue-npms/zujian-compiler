@@ -48,7 +48,7 @@ exports.config = function (customConfig) {
                 {
                     test: /\.js$/,
                     loader: 'babel-loader',
-                    include: [resolve('src'), resolve('test')]
+                    include: [resolve('tmp/compiled-components'), resolve('test')]
                 },
                 {
                     test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -86,6 +86,7 @@ exports.config = function (customConfig) {
             new webpack.optimize.UglifyJsPlugin({
                 warnings: false,
                 sourceMap: false,
+                parallel: true,
                 compress: {
                     // important set expression: true
                     expression: true,
