@@ -1,3 +1,10 @@
+@mixin disabled {
+  opacity: .3;
+  &:active {
+    opacity: .3;
+  }
+}
+
 @mixin tap {
   &:active {
     opacity: .5;
