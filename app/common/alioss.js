@@ -21,7 +21,7 @@ module.exports = {
 
             let zipFileName = `${index}.${shortHash}.zip`
             zipFolder.zip(`${comPath}/src`, `${path.posix.resolve(comPath, zipFileName)}`).then(() => {
-                store.put(`oss-co-src-cloud/${zipFileName}`, `${comPath}/${zipFileName}`).then(object => {
+                store.put(`oss-src-cloud/${zipFileName}`, `${comPath}/${zipFileName}`).then(object => {
                     resolve({src: {
                         index,
                         config,
@@ -51,7 +51,7 @@ module.exports = {
                     let filePath = path.resolve(distPath, dir, fileName)
                     if (fs.statSync(filePath).isFile()) {
                         filePromises.push(new Promise(((resolve, reject) => {
-                            store.put(`co-dist/${index}/${dir}/${fileName}`, `${filePath}`).then(object => {
+                            store.put(`dist/${index}/${dir}/${fileName}`, `${filePath}`).then(object => {
                                 resolve({unit: dir, object})
                             }).catch(err => {
                                 reject(err)
