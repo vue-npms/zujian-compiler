@@ -73,3 +73,5 @@ uploadFile (e) {
   }
 },
 ```
+
+部署参考`https://www.jianshu.com/p/9680c87a3696`
