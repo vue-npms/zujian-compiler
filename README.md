@@ -78,3 +78,17 @@ uploadFile (e) {
 ```
 pm2 deploy ecosystem.config.js production
 ```
+
+
+// config/application.json
+```
+{
+  "PORT": "4001",
+  "ossConfig": {
+    "accessKeyId": "LTAIgoOwneZiuS9b",
+    "accessKeySecret": "j5dZlRkWP2SVnDoD3XqAh60WCdOM1l",
+    "bucket": "webco-cloud",
+    "region": "oss-cn-shanghai"
+  }
+}
+```
