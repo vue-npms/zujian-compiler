@@ -19,15 +19,12 @@ module.exports = {
 
             let shortHash = `${config.px && config.px.shortHash}.${config.rem && config.rem.shortHash}`
 
+            let randomString = Math.random().toString(36).substr(-7)
             let zipFileName = `${index}.${shortHash}.zip`
+            let toZipFileName = `${index}.${shortHash}.${randomString}.zip`
             zipFolder.zip(`${comPath}/src`, `${path.posix.resolve(comPath, zipFileName)}`).then(() => {
-                store.put(`code/src-cloud/${zipFileName}`, `${comPath}/${zipFileName}`).then(object => {
-                    resolve({src: {
-                        index,
-                        config,
-                        zip_file_name: zipFileName,
-                        object
-                    }})
+                store.put(`code/src-cloud/${toZipFileName}`, `${comPath}/${zipFileName}`).then(object => {
+                    resolve({src: {index, config, filename: toZipFileName, object}})
                 }).catch(err => {
                     reject(err)
                 })
@@ -52,7 +49,7 @@ module.exports = {
                     if (fs.statSync(filePath).isFile()) {
                         filePromises.push(new Promise(((resolve, reject) => {
                             store.put(`code/dist/${index}/${dir}/${fileName}`, `${filePath}`).then(object => {
-                                resolve({unit: dir, object})
+                                resolve({unit: dir, object, filename: fileName})
                             }).catch(err => {
                                 reject(err)
                             })
