@@ -1,11 +1,13 @@
 @mixin disabled {
-  opacity: .3;
+  cursor: default;
+  opacity: .5;
   &:active {
-    opacity: .3;
+    opacity: .5;
   }
 }
 
 @mixin tap {
+  cursor: pointer;
   &:active {
     opacity: .5;
   }

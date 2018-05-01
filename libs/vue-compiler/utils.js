@@ -65,6 +65,7 @@ exports.cssLoaders = function (options) {
                 path.resolve(__dirname, './common/scss/mixins/var.scss'),
                 path.resolve(__dirname, './common/scss/mixins/animation.scss'),
                 path.resolve(__dirname, './common/scss/mixins/classes.scss'),
+                path.resolve(__dirname, './common/scss/mixins/devices.scss'),
             ]
             if (scssConfig) {
               if (scssConfig.resources) {
