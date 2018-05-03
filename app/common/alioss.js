@@ -23,7 +23,7 @@ module.exports = {
             let zipFileName = `${index}.${shortHash}.zip`
             let toZipFileName = `${index}.${shortHash}.${randomString}.zip`
             zipFolder.zip(`${comPath}/src`, `${path.posix.resolve(comPath, zipFileName)}`).then(() => {
-                store.put(`code/src-cloud/${toZipFileName}`, `${comPath}/${zipFileName}`).then(object => {
+                store.put(`vue/src/${toZipFileName}`, `${comPath}/${zipFileName}`).then(object => {
                     resolve({src: {index, config, filename: toZipFileName, object}})
                 }).catch(err => {
                     reject(err)
@@ -48,7 +48,7 @@ module.exports = {
                     let filePath = path.resolve(distPath, dir, fileName)
                     if (fs.statSync(filePath).isFile()) {
                         filePromises.push(new Promise(((resolve, reject) => {
-                            store.put(`code/dist/${index}/${dir}/${fileName}`, `${filePath}`).then(object => {
+                            store.put(`vue/dist/${index}/${dir}/${fileName}`, `${filePath}`).then(object => {
                                 resolve({unit: dir, object, filename: fileName})
                             }).catch(err => {
                                 reject(err)
