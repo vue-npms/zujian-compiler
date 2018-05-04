@@ -26,6 +26,28 @@
   }
 }
 
+@mixin animation-rotate-x() {
+  @keyframes animation-rotate-x {
+    from {
+      transform:rotateX(0deg)
+    }
+    to {
+      transform:rotateX(360deg)
+    }
+  }
+}
+
+@mixin animation-rotate-y() {
+  @keyframes animation-rotate-y {
+    from {
+      transform:rotateY(0deg)
+    }
+    to {
+      transform:rotateY(360deg)
+    }
+  }
+}
+
 @mixin animation-fade-out() {
   @keyframes animation-fade-out {
     to {
